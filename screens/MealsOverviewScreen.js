@@ -1,18 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
+import { MEALS } from "../data/dummy-data";
+import { useLayoutEffect } from "react";
+import { CATEGORIES } from "../data/dummy-data";
+import MealList from "../components/MealList/MealList";
 
-function MealsOverviewScreen() {
-    return (
-        <View style={styles.container}>
-            <Text>MealsOverviewScreen</Text>
-        </View>
-    );
+function MealsOverviewScreen({route, navigation}) {
+    const catID = route.params.categoryId;
+    const displayedMeals = MEALS.filter((meal) => {
+        return meal.categoryIds.indexOf(catID) >= 0
+    });
+
+    useLayoutEffect(() => {
+        const categoryTitle = CATEGORIES.find((category) => category.id === catID).title;
+        navigation.setOptions({
+            title: categoryTitle,
+        });
+    }, [catID, navigation]);
+
+    return <MealList dataItem={displayedMeals} />
 }
 
 export default MealsOverviewScreen;
 
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        padding:16
-    }
-});
